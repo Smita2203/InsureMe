@@ -25,6 +25,12 @@ stage('Publish TestNG report') {
        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '/var/lib/jenkins/workspace/Insure_Me_Project/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
             }
     }
+stage('Build Docker Image') {
+      steps {
+        echo 'Docker Image'
+        sh 'docker build -t smita100/insureme:01 .'
+                   }
+            }
  stage('Login to Dockerhub') {
       steps {
        withCredentials([usernamePassword(credentialsId: 'Dockerlogin_user', passwordVariable: 'Dockerpassword', usernameVariable: 'Dockerlogin')])
@@ -33,12 +39,13 @@ stage('Publish TestNG report') {
               }
                                 }
             }
-stage('Push Docker Image') {
+
+stage('Push the Docker image') {
       steps {
-        echo 'Push a Docker Image'
-        sh 'docker build -t smita100/insureme:01 .'
-                   }
+        sh 'docker push smita100/insureme:01'
+                                }
             }
+
  
 }
 }
